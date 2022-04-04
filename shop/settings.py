@@ -40,7 +40,7 @@ INSTALLED_APPS = [
 
     # my apps
     'applications.product', # - надо в apps.py тоже также указать
-
+    'applications.account',
     # modules
     'rest_framework'
 ]
@@ -134,3 +134,9 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 MEDIA_ROOT = BASE_DIR / 'media/' # картинки должны тут хранится
+
+
+AUTH_USER_MODEL = 'account.CustomUser'
+
+
+
