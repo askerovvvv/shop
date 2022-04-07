@@ -47,6 +47,8 @@ INSTALLED_APPS = [
     # modules
     'rest_framework',
     'rest_framework.authtoken', # token
+    'drf_yasg'
+
 ]
 
 MIDDLEWARE = [
@@ -144,7 +146,7 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-
+MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media/' # картинки должны тут хранится
 
 
@@ -162,5 +164,11 @@ REST_FRAMEWORK = {
     'DEFAULT_AUTHENTICATION_CLASSES': [
        'rest_framework.authentication.TokenAuthentication'
     ],
+    # 'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
+    # 'PAGE_SIZE': 2,
+    # 'DEFAULT_PERMISSION_CLASSES': [
+        # 'rest_framework.permissions.IsAuthenticated' # AllowAny - по дефолту
+    # ],
 }
+
 
