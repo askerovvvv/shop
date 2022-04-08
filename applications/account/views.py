@@ -23,18 +23,6 @@ class RegisterApiView(APIView):
         return Response(status=status.HTTP_400_BAD_REQUEST)
 
 
-class ActivationView(APIView):
-    def get(self, request, activation_code): # activation_code может называться как угодно
-        try:
-            user = User.objects.get(activation_code=activation_code) # вытащи User у которого активационынй код будет равен активационному коду которую мы передали
-            user.is_active = True # если все хорошо АКТИВНЫЙ ПОЛЬЗОВАТЕЛЬ
-            user.activation_code = ''
-            user.save()
-            return Response("ВЫ успешно активизировали свой аккаунт", status=status.HTTP_200_OK)
-        except User.DoesNotExist:
-            return Response("Активационный код не действителен")
-
-
 class LoginApiView(ObtainAuthToken):
     serializer_class = LoginSerializer
 
@@ -64,5 +52,17 @@ class ChangePasswordView(APIView):
 
 
 
+
+
+class ActivationView(APIView):
+    def get(self, request, activation_code): # activation_code может называться как угодно
+        try:
+            user = User.objects.get(activation_code=activation_code) # вытащи User у которого активационынй код будет равен активационному коду которую мы передали
+            user.is_active = True # если все хорошо АКТИВНЫЙ ПОЛЬЗОВАТЕЛЬ
+            user.activation_code = ''
+            user.save()
+            return Response("ВЫ успешно активизировали свой аккаунт", status=status.HTTP_200_OK)
+        except User.DoesNotExist:
+            return Response("Активационный код не действителен")
 
 

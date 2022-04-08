@@ -47,7 +47,8 @@ INSTALLED_APPS = [
     # modules
     'rest_framework',
     'rest_framework.authtoken', # token
-    'drf_yasg'
+    'drf_yasg',
+    'django_filters'
 
 ]
 
@@ -169,6 +170,9 @@ REST_FRAMEWORK = {
     # 'DEFAULT_PERMISSION_CLASSES': [
         # 'rest_framework.permissions.IsAuthenticated' # AllowAny - по дефолту
     # ],
+    # 'DEFAULT_FILTER_BACKENDS': [
+    #     'django_filters.rest_framework.DjangoFilterBackend'
+    # ]
 }
 
 
