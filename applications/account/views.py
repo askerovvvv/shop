@@ -28,10 +28,11 @@ class LoginApiView(ObtainAuthToken):
 
 
 class LogoutView(APIView):
-    permission_classes = [IsAuthenticated] # чтобы разлогинится должен быть регистрированным
+    permission_classes = [IsAuthenticated] # чтобы разлогинится должен быть login
+
     def post(self, request):
         try:
-            user = request.User
+            user = request.user
             Token.objects.filter(user=user).delete() # Встроенное слово нужно импортировать || удаляет токен пользователя который вышел
             return Response("Вы успешно разлогинились")
         except:
@@ -48,10 +49,6 @@ class ChangePasswordView(APIView):
 
         serializer.set_user_password()
         return Response('Пароль успешно обновлен!')
-
-
-
-
 
 
 class ActivationView(APIView):
