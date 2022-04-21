@@ -1,5 +1,7 @@
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.db.models import Q
 from django.shortcuts import render
+from django.views import View
 from django_filters.rest_framework import DjangoFilterBackend
 from rest_framework.decorators import action
 from rest_framework.filters import SearchFilter, OrderingFilter
@@ -70,6 +72,7 @@ class ProductViewSet(ModelViewSet):
         return [permission() for permission in permissions]
 
     def perform_create(self, serializer):
+
         serializer.save(owner=self.request.user)   # при создании продукта нам не придется ввести кто owner так как будет автоматически залогинненого пользователя
         # переходим в serializers и настраиваем
 

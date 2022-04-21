@@ -15,6 +15,5 @@ urlpatterns = [
     path('category/', CategoryListCreateView.as_view()),
     path('category/<str:slug>/', CategoryRetriveDeleteUpdateView.as_view()),
     path('', include(router.urls)),         # он сам распределяет GET POST запросы весь CRUD |       нужно роутер в конце писать
-
 ]
 
