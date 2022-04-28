@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'rest_framework',
     'rest_framework.authtoken', # token
     'drf_yasg',
-    'django_filters'
+    'django_filters',
+    'applications.cart'
 
 ]
 
@@ -174,5 +175,20 @@ REST_FRAMEWORK = {
     #     'django_filters.rest_framework.DjangoFilterBackend'
     # ]
 }
+
+
+REDIS_HOST = '127.0.0.1'
+REDIS_PORT = '6379'
+
+CELERY_BROKER_URL = 'redis://localhost:6379'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379'
+
+
+
+
+
+
+
+
 
 

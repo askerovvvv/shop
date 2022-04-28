@@ -1,7 +1,8 @@
 from django.contrib.auth import get_user_model, authenticate
 
 from rest_framework import serializers
-from applications.account.send_mail import send_confirmation_email
+# from applications.account.send_mail import send_confirmation_email
+from shop.tasks import send_confirmation_email
 
 User = get_user_model()
 
@@ -20,16 +21,18 @@ class RegisterSerializer(serializers.ModelSerializer):
             raise serializers.ValidationError('Password do not match')
         return attrs # Если все хорошо нужно возвращать все данные
 
-    def validate_email(self, email):
-        if not email.endswith('gmail.com'):
-            raise serializers.ValidationError('your email must end with "gmail.com"" ')
-        return email
+    # def validate_email(self, email):
+    #     if not email.endswith('gmail.com'):
+    #         raise serializers.ValidationError('your email must end with "gmail.com"" ')
+    #     return email
 
     def create(self, validated_data): # логика регистрации
         user = User.objects.create_user(**validated_data) # принимает все данные которые прошли проверку
         code = user.activation_code  # наш активационный код передали новой переменной
-        send_confirmation_email(code, user) # импорт из send_mail.py | передаем в аргументы email и code
+        # send_confirmation_email(code, user) # импорт из send_mail.py | передаем в аргументы email и code
 
+
+        send_confirmation_email.delay(code, user.email) # delay - указывает что он будет работать с celery
         return user
 
 

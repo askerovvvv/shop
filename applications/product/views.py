@@ -12,7 +12,7 @@ from rest_framework.permissions import IsAuthenticated, IsAuthenticatedOrReadOnl
 from rest_framework.viewsets import ModelViewSet, GenericViewSet, ViewSet
 
 from applications.product.filters import ProductFilter
-from applications.product.models import Product, Rating, Category
+from applications.product.models import Product, Rating, Category, Like
 from applications.product.permissions import IsAdmin
 from applications.product.serializers import ProductSerializer, RatingSerializers, CategorySerializers
 
@@ -77,7 +77,7 @@ class ProductViewSet(ModelViewSet):
         # переходим в serializers и настраиваем
 
     @action(methods=['POST'], detail=True) # detail=True
-    def rating(self, request, pk): # pk - к определонному товару     # http://localhost:8000/product/id_product/rating/
+    def rating(self, request, pk): # pk - к определонному товару     # http://localhost:8000/api/v1/product/id_product/rating/
         serializer = RatingSerializers(data=request.data) # хранятся данные которые мы вели в теле запроса
         serializer.is_valid(raise_exception=True)
 
@@ -90,6 +90,18 @@ class ProductViewSet(ModelViewSet):
         obj.save()
         return Response(request.data, status=status.HTTP_201_CREATED)
 
+    @action(methods=['POST'], detail=True)
+    def like(self, request, pk):
+        product = self.get_object() # self ########
+        like_obj, _ = Like.objects.get_or_create(product=product, owner=request.user) # если нету создастся, если есть получим в эту переменную
+        print(like_obj)
+        # (admin@admin.com, False, False)
+        like_obj.like = not like_obj.like
+        like_obj.save()
+        status = 'liked'
+        if not like_obj.like:
+            status = 'unlike' #############################################################
+        return Response({'status': status})
 
 class CategoryListCreateView(ListCreateAPIView):
     queryset = Category.objects.all()

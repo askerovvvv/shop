@@ -6,11 +6,19 @@ User = get_user_model()
 
 
 class Category(models.Model):
-    slug = models.SlugField(max_length=30, primary_key=True)
-    description = models.TextField(blank=True, null=True)
+    title = models.TextField(max_length=100)
+    slug = models.SlugField(max_length=30, primary_key=True, blank=True, unique=True)
+    parent = models.ForeignKey('Category', on_delete=models.CASCADE, blank=True, null=True, related_name='children')
 
     def __str__(self):
-        return f"{self.slug} - {self.description} "
+        if not self.parent:
+            return self.slug
+        else:
+            return f'{self.parent} --> {self.slug}'
+
+    def save(self, *args, **kwargs):
+        self.slug = self.title.lower()
+        super(Category, self).save(*args, **kwargs) #
 
 
 class Product(models.Model):
@@ -22,9 +30,9 @@ class Product(models.Model):
     # image = models.ImageField(upload_to='images', null=True, blank=True) # скачиваем библеотеку для работы с ним (requirements.txt pillow)
     # likes = models.ManyToManyField(User, blank=True, related_name='likes')
 
-
     def __str__(self):
         return f'{self.id}'
+
 
 class Image(models.Model):
     image = models.ImageField(upload_to='images')
@@ -38,6 +46,23 @@ class Rating(models.Model):
         MinValueValidator(1),
         MaxValueValidator(5),
     ]) # сам рейтинг оценка от 1 до 5
+
+
+class Like(models.Model):
+    """
+    Модель лайков
+    """
+    owner = models.ForeignKey(User, on_delete=models.CASCADE, related_name='like', verbose_name='Владелец лайка')
+    product = models.ForeignKey(Product, on_delete=models.CASCADE, related_name='like', verbose_name='Продукт')
+    like = models.BooleanField('ЛААААААААЙК', default=False)
+
+    def __str__(self):
+        return f'{self.owner}, {self.like}'
+
+
+
+
+
 
 
 
